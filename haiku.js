@@ -1,5 +1,4 @@
 var fs = require('fs');
-// console.log(fs.readFileSync('./cmudict.txt'))
 var fileString = fs.readFileSync('./cmudict.txt').toString();
 
 var syllSplit = function (wordString){
@@ -26,32 +25,45 @@ function syllableSorter(n, word){
 	else if (n === 7) syllables.sevenSyll.push(word);	
 }
 
-function createHaiku (){
-	// console.log('Function is running') //debugging
+function syllableFunc() {
 	var lines = fileString.split('\n');
 	for (var i = 0; i<lines.length; i++){
 			lines[i] = syllSplit(lines[i]);
 	}
-	// console.log(lines); //debugging
-	for (var i = 0; i<lines.length; i++){
+	for (var i = 0; i<lines.length-1; i++){
 		var syllCount = 0;
-		// console.log("check") //debugging
 		var length = lines[i][1].length;
-		// console.log(lines[i][1]); //debugging
 		for (var j = 0; j<length; j++){
-				// console.log(lines[i][1][j]) //debugging
-			if (lines[i][1][j] !== ' ' && lines[i][1][j].match(/[a-z]|[A-Z]/) === null) //typeof(Number(lines[i][1][j])) === "number")
+			if (lines[i][1][j] !== ' ' && lines[i][1][j].match(/[a-z]|[A-Z]/) === null)
 				syllCount++;
 		}
-		// console.log(syllCount); //debugging
 		syllableSorter(syllCount,lines[i][0]);
 	}
-	// console.log(syllables); //debugging
 }
-createHaiku();
-// module.exports.createHaiku = createHaiku
 
+function chooseWords(n){
+	if (n > 7 || n < 0) return false;
+	else if (n === 1) var using = syllables.oneSyll;
+	else if (n === 2) var using = syllables.twoSyll;
+	else if (n === 3) var using = syllables.threeSyll;
+	else if (n === 4) var using = syllables.fourSyll;
+	else if (n === 5) var using = syllables.fiveSyll;
+	else if (n === 6) var using = syllables.sixSyll;
+	else if (n === 7) var using = syllables.sevenSyll;
 
+	return using[Math.floor(Math.random() * using.length)];
+}
 
+function createHaiku (arr1, arr2, arr3){
+	syllableFunc();
+	var haikuString = '';
+	for (var i = 0; i < arguments.length; i++){
+		for (var j = 0; j < arguments[i].length; j++){
+			haikuString += chooseWords(arguments[i][j]) + ' ';
+		}
+		haikuString += '\n';
+	}
+	console.log(haikuString);
+}
 
-
+module.exports.createHaiku = createHaiku
