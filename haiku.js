@@ -57,13 +57,108 @@ function chooseWords(n){
 function createHaiku (arr1, arr2, arr3){
 	syllableFunc();
 	var haikuString = '';
-	for (var i = 0; i < arguments.length; i++){
+
+	if (process.argv[2] === 'Book'){
+
+		var Candide = fs.readFileSync('./19942-8.txt').toString().replace(/[^a-z0-9A-Z'-]/g, ' ').split(' '); //Could change file name to any book in the "Library"
+		Candide = difference(Candide, ['']);
+		syllables.twoSyll.push("CANDIDE");
+		var completeHaiku = 0;
+		var countingSylls = 0;
+		var keepTrack = true;
+		var randomSpot = Math.floor(Math.random() * Candide.length);
+		while(keepTrack){
+			var haikuStringHold = '';
+			if (completeHaiku === 0 || completeHaiku === 2) var tracker = 5;
+			else var tracker = 7;
+
+			while(countingSylls < tracker){
+				if(syllables.oneSyll.indexOf(Candide[randomSpot].toUpperCase()) !== -1){
+					if (countingSylls + 1 <= tracker){
+					haikuStringHold += Candide[randomSpot] + ' ';
+					countingSylls += 1;
+					}
+					else{ haikuStringHold = '';
+					countingSylls = 0;}				
+				}
+				else if(syllables.twoSyll.indexOf(Candide[randomSpot].toUpperCase()) !== -1 && countingSylls + 2 <= tracker){
+					if (countingSylls + 2 <= tracker){
+					haikuStringHold += Candide[randomSpot] + ' ';
+					countingSylls += 2;
+					}
+					else{ haikuStringHold = '';
+					countingSylls = 0;}				
+				}
+				else if(syllables.threeSyll.indexOf(Candide[randomSpot].toUpperCase()) !== -1 && countingSylls + 3 <= tracker){
+					if (countingSylls + 3 <= tracker){
+					haikuStringHold += Candide[randomSpot] + ' ';
+					countingSylls += 3;
+					}
+					else{ haikuStringHold = '';
+					countingSylls = 0;}				
+				}
+				else if(syllables.fourSyll.indexOf(Candide[randomSpot].toUpperCase()) !== -1 && countingSylls + 4 <= tracker){
+					if (countingSylls + 4 <= tracker){
+					haikuStringHold += Candide[randomSpot] + ' ';
+					countingSylls += 4;
+					}
+					else{ haikuStringHold = '';
+					countingSylls = 0;}				
+				}
+				else if(syllables.fiveSyll.indexOf(Candide[randomSpot].toUpperCase()) !== -1 && countingSylls + 5 <= tracker){
+					if (countingSylls + 5 <= tracker){
+					haikuStringHold += Candide[randomSpot] + ' ';
+					countingSylls += 5;
+					}
+					else{ haikuStringHold = '';
+					countingSylls = 0;}				
+				}
+				else if(syllables.sixSyll.indexOf(Candide[randomSpot].toUpperCase()) !== -1 && countingSylls + 6 <= tracker){
+					if (countingSylls + 6 <= tracker){
+					haikuStringHold += Candide[randomSpot] + ' ';
+					countingSylls += 6;
+					}
+					else{ haikuStringHold = '';
+					countingSylls = 0;}				
+				}
+				else if(syllables.sevenSyll.indexOf(Candide[randomSpot].toUpperCase()) !== -1 && countingSylls + 7 <= tracker){
+					if (countingSylls + 7 <= tracker){
+					haikuStringHold += Candide[randomSpot] + ' ';
+					countingSylls += 7;
+					}
+					else{ haikuStringHold = '';
+					countingSylls = 0;}				
+				}
+				randomSpot++;
+			}
+
+			haikuString = haikuString + haikuStringHold + '\n';
+			completeHaiku++;
+			countingSylls = 0;
+			var newSpotPerhaps = Math.random();
+			if (newSpotPerhaps >= .5) randomSpot = Math.floor(Math.random() * Candide.length);
+
+			if (completeHaiku === 3) keepTrack = false;
+		}
+	}
+
+	else {for (var i = 0; i < arguments.length; i++){
 		for (var j = 0; j < arguments[i].length; j++){
 			haikuString += chooseWords(arguments[i][j]) + ' ';
 		}
 		haikuString += '\n';
 	}
+	}
 	console.log(haikuString);
 }
+
+function difference(arr1, arr2){
+	function filterer(val){
+		if (arr2.indexOf(val) != -1) return false;
+		else return true;
+	};
+	return arr1.filter(filterer);
+}
+
 
 module.exports.createHaiku = createHaiku
